@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import net.geekh.wiki.domain.Ebook;
 import net.geekh.wiki.service.IEbookService;
 import net.geekh.wiki.vo.CommonResponseVo;
+import net.geekh.wiki.vo.EbookVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +25,9 @@ public class EBookController {
     private IEbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResponseVo<List<Ebook>> list() {
+    public CommonResponseVo<List<EbookVo>> list() {
 
-        List<Ebook> list = ebookService.list();
-        return new CommonResponseVo<List<Ebook>>(0,list);
+        List<EbookVo> list = ebookService.list();
+        return new CommonResponseVo<List<EbookVo>>(0,list);
     }
 }

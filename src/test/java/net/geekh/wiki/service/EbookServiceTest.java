@@ -3,6 +3,7 @@ package net.geekh.wiki.service;
 import lombok.extern.slf4j.Slf4j;
 import net.geekh.wiki.WikiApplicationTests;
 import net.geekh.wiki.domain.Ebook;
+import net.geekh.wiki.vo.EbookVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,7 +22,7 @@ public class EbookServiceTest extends WikiApplicationTests {
 
     @Test
     void list() {
-        List<Ebook> list = IEbookService.list();
+        List<EbookVo> list = IEbookService.list();
         log.info("list==>{}",list);
 
     }

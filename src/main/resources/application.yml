@@ -7,3 +7,5 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/wiki?characterEncoding=utf-8&userSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: password
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml

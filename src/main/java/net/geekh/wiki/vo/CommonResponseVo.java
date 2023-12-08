@@ -17,7 +17,7 @@ public class CommonResponseVo<T> {
 
     private String msg;
 
-    private T date;
+    private T data;
 
 
     public CommonResponseVo(Integer status, String msg) {
@@ -25,15 +25,15 @@ public class CommonResponseVo<T> {
         this.msg = msg;
     }
 
-    public CommonResponseVo(Integer status, T date) {
+    public CommonResponseVo(Integer status, T data) {
         this.status = status;
-        this.date = date;
+        this.data = data;
     }
 
-    public CommonResponseVo(Integer status, String msg, T date) {
+    public CommonResponseVo(Integer status, String msg, T data) {
         this.status = status;
         this.msg = msg;
-        this.date = date;
+        this.data = data;
     }
 
 

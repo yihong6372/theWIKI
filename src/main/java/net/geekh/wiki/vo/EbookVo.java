@@ -1,6 +1,5 @@
 package net.geekh.wiki.vo;
 
-
 import lombok.Data;
 
 @Data
@@ -13,7 +12,7 @@ public class EbookVo {
 
     private Long category2Id;
 
-
+    private String description;
 
     private String cover;
 
@@ -22,6 +21,5 @@ public class EbookVo {
     private Integer viewCount;
 
     private Integer voteCount;
-
 
 }

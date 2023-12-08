@@ -48,22 +48,41 @@
     <a-layout-contents
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      Contentdsfsf
+      <pre>
+        {{ ebooks }}
+        <hr>
+        {{ books }}
+      </pre>
     </a-layout-contents>
   </a-layout>
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import { defineComponent, onMounted, ref, reactive, toRef } from 'vue';
 import axios from 'axios'
 
 export default defineComponent({
   name: 'HomeView',
   setup() {
     console.log("setup......");
-    axios.get("http://localhost:8081/ebook/list").then((response) => {
-      console.log(response);
-    })
+    const ebooks = ref();
+    const ebooks1 = reactive({books: []});
+
+    onMounted(() => {
+      console.log("onMounted.....")
+      axios.get("http://localhost:8081/ebook/list").then((response) => {
+        const data = response.data;
+        ebooks.value = data.data;
+        ebooks1.books = data.data;
+        console.log(response);
+
+      });
+    });
+
+    return {
+      ebooks,
+      books: toRef(ebooks1, "books")
+    }
   }
 });
 </script>

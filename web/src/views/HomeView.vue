@@ -96,7 +96,7 @@ const pagination = {
   },
   pageSize: 3,
 };
-const actions: Record<string, any>[] = [
+const actions: any= [
   { icon: StarOutlined, text: '156' },
   { icon: LikeOutlined, text: '156' },
   { icon: MessageOutlined, text: '2' },
@@ -115,7 +115,6 @@ export default defineComponent({
         const data = response.data;
         ebooks.value = data.data;
         ebooks1.books = data.data;
-        console.log(response);
 
       });
     });

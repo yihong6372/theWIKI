@@ -76,19 +76,6 @@ import { defineComponent, onMounted, ref, reactive, toRef } from 'vue';
 import axios from 'axios'
 import {LikeOutlined, MessageOutlined, StarOutlined} from "@ant-design/icons-vue";
 
-const listData: any = [];
-
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://joeschmoe.io/api/v1/random',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
 
 const pagination = {
   onChange: (page: number) => {
@@ -107,22 +94,24 @@ export default defineComponent({
   setup() {
     console.log("setup......");
     const ebooks = ref();
-    const ebooks1 = reactive({books: []});
+    // const ebooks1 = reactive({books: []});
 
     onMounted(() => {
-      console.log("onMounted.....\\\\")
-      axios.get(  "/ebook/list").then((response) => {
+      console.log("onMounted.....")
+      axios.get("/ebook/list", {
+        params: {
+          page: 1,
+          size: 1000
+        }
+      }).then((response) => {
         const data = response.data;
-        ebooks.value = data.data;
-        ebooks1.books = data.data;
-
+        ebooks.value = data.data.list;
       });
     });
 
     return {
       ebooks,
-      books: toRef(ebooks1, "books"),
-      listData,
+      // books: toRef(ebooks1, "books"),
       actions
     }
   }

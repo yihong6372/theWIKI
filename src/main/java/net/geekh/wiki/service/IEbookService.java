@@ -1,6 +1,7 @@
 package net.geekh.wiki.service;
 
 import net.geekh.wiki.domain.Ebook;
+import net.geekh.wiki.form.EbookForm;
 import net.geekh.wiki.vo.EbookVo;
 
 import java.util.List;
@@ -12,5 +13,5 @@ import java.util.List;
  */
 public interface IEbookService {
 
-    List<EbookVo> list();
+    List<EbookVo> list(EbookForm form);
 }

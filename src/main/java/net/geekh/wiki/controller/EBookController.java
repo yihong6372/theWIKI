@@ -27,7 +27,7 @@ public class EBookController {
     @GetMapping("/list")
     public CommonResponseVo<List<EbookVo>> list() {
 
-        List<EbookVo> list = ebookService.list();
+        List<EbookVo> list = ebookService.list(null);
         return new CommonResponseVo<List<EbookVo>>(0,list);
     }
 }

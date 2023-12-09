@@ -46,6 +46,7 @@ public class EBookServiceImpl implements IEbookService {
 
         PageVo<EbookVo> pageVo = new PageVo<>();
         pageVo.setTotal(pageInfo.getTotal());
+        pageVo.setList(ebookVos);
 
         Log.info("asfds{}",pageInfo);
         return pageVo;

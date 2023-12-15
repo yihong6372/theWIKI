@@ -1,6 +1,10 @@
 package net.geekh.wiki.form;
 
+import lombok.Data;
+
 public class EbookQueryForm extends PageForm{
+
+
     private Long id;
 
     private String name;

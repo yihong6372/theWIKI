@@ -1,5 +1,9 @@
 package net.geekh.wiki.form;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 /**
  * @Author YIHONG
  * @Description
@@ -7,31 +11,26 @@ package net.geekh.wiki.form;
  */
 public class PageForm {
 
-    private int page;
+    @NotNull
+    private Integer page;
 
-    private int size;
+    @NotNull
+    @Max(value = 1000, message = "最大1000")
+    private Integer size;
 
-    public int getPage() {
+    public Integer getPage() {
         return page;
     }
 
-    public void setPage(int page) {
+    public void setPage(Integer page) {
         this.page = page;
     }
 
-    public int getSize() {
+    public Integer getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(Integer size) {
         this.size = size;
-    }
-
-    @Override
-    public String toString() {
-        return "PageForm{" +
-                "page=" + page +
-                ", size=" + size +
-                '}';
     }
 }

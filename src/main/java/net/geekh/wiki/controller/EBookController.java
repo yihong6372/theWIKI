@@ -1,5 +1,6 @@
 package net.geekh.wiki.controller;
 
+import jakarta.validation.Valid;
 import net.geekh.wiki.form.EbookQueryForm;
 import net.geekh.wiki.form.EbookSaveForm;
 import net.geekh.wiki.service.IEbookService;
@@ -22,7 +23,7 @@ public class EBookController {
     private IEbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResponseVo<PageVo<EbookVo>> list(EbookQueryForm form) {
+    public CommonResponseVo<PageVo<EbookVo>> list(@Valid EbookQueryForm form) {
 
         PageVo<EbookVo> pageVo = ebookService.list(form);
         return new CommonResponseVo<PageVo<EbookVo>>(0,pageVo);

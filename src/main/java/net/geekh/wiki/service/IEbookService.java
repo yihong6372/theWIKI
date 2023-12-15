@@ -1,11 +1,10 @@
 package net.geekh.wiki.service;
 
-import net.geekh.wiki.domain.Ebook;
-import net.geekh.wiki.form.EbookForm;
+import net.geekh.wiki.form.EbookQueryForm;
+import net.geekh.wiki.form.EbookSaveForm;
+import net.geekh.wiki.vo.CommonResponseVo;
 import net.geekh.wiki.vo.EbookVo;
 import net.geekh.wiki.vo.PageVo;
-
-import java.util.List;
 
 /**
  * @Author YIHONG
@@ -14,5 +13,10 @@ import java.util.List;
  */
 public interface IEbookService {
 
-    PageVo<EbookVo> list(EbookForm form);
+    PageVo<EbookVo> list(EbookQueryForm form);
+
+    CommonResponseVo save(EbookSaveForm form);
+
+    CommonResponseVo delete(Long ebookId);
+
 }

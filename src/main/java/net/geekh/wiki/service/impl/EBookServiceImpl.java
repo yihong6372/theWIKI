@@ -4,10 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.geekh.wiki.domain.Ebook;
 import net.geekh.wiki.domain.EbookExample;
-import net.geekh.wiki.form.EbookForm;
+import net.geekh.wiki.form.EbookQueryForm;
+import net.geekh.wiki.form.EbookSaveForm;
 import net.geekh.wiki.mapper.EbookMapper;
 import net.geekh.wiki.service.IEbookService;
 import net.geekh.wiki.util.CopyUtil;
+import net.geekh.wiki.util.SnowFlake;
+import net.geekh.wiki.vo.CommonResponseVo;
 import net.geekh.wiki.vo.EbookVo;
 import net.geekh.wiki.vo.PageVo;
 import org.slf4j.Logger;
@@ -32,8 +35,11 @@ public class EBookServiceImpl implements IEbookService {
     @Autowired
     private EbookMapper ebookMapper;
 
+    @Autowired
+    private SnowFlake snowFlake;
+
     @Override
-    public PageVo<EbookVo> list(EbookForm form) {
+    public PageVo<EbookVo> list(EbookQueryForm form) {
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(form.getName())) {
@@ -50,5 +56,36 @@ public class EBookServiceImpl implements IEbookService {
 
         Log.info("asfds{}",pageInfo);
         return pageVo;
+    }
+
+    @Override
+    public CommonResponseVo save(EbookSaveForm form) {
+
+        Ebook ebook = CopyUtil.copy(form, Ebook.class);
+        if (ObjectUtils.isEmpty(form.getId())) {
+            ebook.setId(snowFlake.nextId());
+            int i = ebookMapper.insertSelective(ebook);
+            if (i == 0) {
+                return new CommonResponseVo(-1, "新增失败");
+                //TODO 服务异常处理
+            }
+        } else {
+
+            int i = ebookMapper.updateByPrimaryKeySelective(ebook);
+            if (i == 0) {
+                return new CommonResponseVo(-1, "编辑失败");
+                //TODO 服务异常处理
+            }
+        }
+        return new CommonResponseVo(0, "成功");
+    }
+
+    @Override
+    public CommonResponseVo delete(Long ebookId) {
+        int i = ebookMapper.deleteByPrimaryKey(ebookId);
+        if (i == 0) {
+            return new CommonResponseVo(-1, "删除失败");
+        }
+        return new CommonResponseVo(0, "删除成功");
     }
 }

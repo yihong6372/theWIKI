@@ -2,28 +2,24 @@
   <a-layout>
     <a-layout-sider width="200" style="background: #fff">
       <a-menu
+          v-model:selectedKeys="state.selectedKeys"
+          v-model:openKeys="state.openKeys"
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
+          :items="items"
       >
-
-        <a-menu-item key="welcome">
-          <router-link to="/">
-            <MailOUtlined/>
-            <span>欢迎</span>
-          </router-link>
-        </a-menu-item>
-
-        <a-sub-menu v-for="item in level1" :key="item.id">
-          <template v-slot:title>
-              <span>
-                <user-outlined/>
-                {{item.name}}
-              </span>
-          </template>
-          <a-menu-item v-for="child in item.children" :key="child.id">
-            <MailOUtlined/><span>{{child.name}}</span>
-          </a-menu-item>
-        </a-sub-menu>
+<!--        <a-sub-menu key="sub1">-->
+<!--          <template #title>-->
+<!--              <span>-->
+<!--                <user-outlined/>-->
+<!--                subnav 1-->
+<!--              </span>-->
+<!--          </template>-->
+<!--          <a-menu-item key="1">option1</a-menu-item>-->
+<!--          <a-menu-item key="2">option2</a-menu-item>-->
+<!--          <a-menu-item key="3">option3</a-menu-item>-->
+<!--          <a-menu-item key="4">option4</a-menu-item>-->
+<!--        </a-sub-menu>-->
 
       </a-menu>
     </a-layout-sider>
@@ -54,15 +50,18 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref, reactive, toRef, h} from 'vue';
+import {defineComponent, onMounted, ref, reactive, toRef, VueElement, h} from 'vue';
 import axios from 'axios'
 import {
+  AppstoreOutlined,
+  CalendarOutlined,
   LikeOutlined,
-  MessageOutlined,
+  MailOutlined,
+  MessageOutlined, SettingOutlined,
   StarOutlined
 } from "@ant-design/icons-vue";
 import {Tool} from "@/util/tool";
-import { message} from "ant-design-vue";
+import {ItemType, message} from "ant-design-vue";
 
 
 const pagination = {
@@ -78,16 +77,66 @@ const actions: any= [
 ];
 
 export default defineComponent({
-  name: 'HomeView',
+  name: 'HomeView2',
   setup() {
     console.log("setup......");
     const ebooks = ref();
     // const ebooks1 = reactive({books: []});
+    function getItem(
+        label: string,
+        key: string,
+        children?: ItemType[],
+        icon?: any,
+        type?: 'group',
+    ): ItemType {
+      return {
+        key,
+        icon,
+        children,
+        label,
+        type,
+      } as ItemType;
+    }
 
     const level1 = ref();
 
     let categorys: any;
 
+    const state = ref({
+      selectedKeys: ['1'],
+      openKeys: ['sub1'],
+    });
+
+    const items: any = ref([
+      getItem('Navigation Three', 'sub2',  [
+        getItem('Option 7', '7',),
+        getItem('Option 8', '8',),
+        getItem('Option 9', '9',),
+        getItem('Option 10', '10',),
+      ],h(SettingOutlined)),
+      // categorys.forEach((item: any) => {
+      //   if (item.id == 0) {
+      //     getItem(item.name, item.id,null, getItem())
+      //   }
+      // })
+    ]);
+
+    const toItems = (array: any, parentId: number) => {
+      const target: any = [];
+      array.forEach((i: any) => {
+        if (i.parent === 0) {
+          const child: any = [];
+          if (i.children != null) {
+            i.children.forEach((j: any) => {
+                child.push(getItem(j.name, j.id));
+            })
+          }
+          const item = getItem(i.name, i.id, child);
+          target.push(item);
+        }
+      });
+      items.value = target;
+    }
     /**
      * 分类数据查询
      */
@@ -101,14 +150,13 @@ export default defineComponent({
           level1.value = [];
           level1.value = Tool.array2Tree(categorys, 0);
 
+             toItems(level1.value, 0);
         } else {
           message.error(data.msg);
         }
 
       });
     };
-
-
 
 
     onMounted(() => {
@@ -129,8 +177,9 @@ export default defineComponent({
       ebooks,
       // books: toRef(ebooks1, "books"),
       actions,
-      level1,
-      // state
+      // level1,
+      items,
+      state
     }
   }
 });

@@ -45,6 +45,9 @@ public class EBookServiceImpl implements IEbookService {
         if (!ObjectUtils.isEmpty(form.getName())) {
             criteria.andNameLike("%" + form.getName() + "%");
         }
+        if (!ObjectUtils.isEmpty(form.getCategory2Id())) {
+            criteria.andCategory2IdEqualTo(form.getCategory2Id());
+        }
         PageHelper.startPage(form.getPage(), form.getSize());
         List<Ebook> ebooks = ebookMapper.selectByExample(ebookExample);
         List<EbookVo> ebookVos = CopyUtil.copyList(ebooks, EbookVo.class);
@@ -54,7 +57,7 @@ public class EBookServiceImpl implements IEbookService {
         pageVo.setTotal(pageInfo.getTotal());
         pageVo.setList(ebookVos);
 
-        Log.info("asfds{}",pageInfo);
+        Log.info("pageInfo{}",pageInfo);
         return pageVo;
     }
 

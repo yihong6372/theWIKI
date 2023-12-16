@@ -31,6 +31,7 @@ public class EbookServiceTest extends WikiApplicationTests {
         EbookQueryForm queryForm = new EbookQueryForm();
         queryForm.setPage(1);
         queryForm.setSize(100);
+        queryForm.setCategory2Id(202L);
         PageVo<EbookVo> list = IEbookService.list(queryForm);
         log.info("list==>{}",list);
 

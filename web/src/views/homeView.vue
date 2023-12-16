@@ -4,13 +4,12 @@
       <a-menu
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
+          @click="handleClick"
       >
 
         <a-menu-item key="welcome">
-          <router-link to="/">
             <MailOUtlined/>
             <span>欢迎</span>
-          </router-link>
         </a-menu-item>
 
         <a-sub-menu v-for="item in level1" :key="item.id">
@@ -27,10 +26,15 @@
 
       </a-menu>
     </a-layout-sider>
-    <a-layout-contents
-        :style="{ background: '#fff', padding: '20px', margin: 0, minHeight: '280px' }"
+    <a-layout-content
+        :style="{ background: '#fff', padding: '20px', margin: 0, minHeight: '280px'}"
     >
-      <a-list item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
+
+      <div class="welcome" v-show="isShowWelcome">
+        <h1>welcome</h1>
+      </div>
+
+      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -49,7 +53,7 @@
           </a-list-item>
         </template>
       </a-list>
-    </a-layout-contents>
+    </a-layout-content>
   </a-layout>
 </template>
 
@@ -83,7 +87,7 @@ export default defineComponent({
     console.log("setup......");
     const ebooks = ref();
     // const ebooks1 = reactive({books: []});
-
+    const openKeys =  ref();
     const level1 = ref();
 
     let categorys: any;
@@ -109,20 +113,39 @@ export default defineComponent({
     };
 
 
+    const isShowWelcome = ref(true);
+    let category2Id = 0;
 
 
-    onMounted(() => {
-
-      handleQueryCategory();
+    const handleQueryEbook = () => {
       axios.get("/ebook/list", {
         params: {
           page: 1,
-          size: 1000
+          size: 1000,
+          category2Id: category2Id
         }
       }).then((response) => {
         const data = response.data;
         ebooks.value = data.data.list;
+        // ebooks1.books = data.content;
       });
+    };
+
+    const handleClick = (value: any) => {
+      console.log("menu click", value)
+      if (value.key === 'welcome') {
+        isShowWelcome.value = true;
+      } else {
+        console.log("menu click--------", value)
+        category2Id = value.key;
+        isShowWelcome.value = false;
+        handleQueryEbook();
+      }
+      // isShowWelcome.value = value.key === 'welcome';
+    };
+
+    onMounted(() => {
+      handleQueryCategory();
     });
 
     return {
@@ -130,7 +153,11 @@ export default defineComponent({
       // books: toRef(ebooks1, "books"),
       actions,
       level1,
-      // state
+      handleClick,
+      isShowWelcome,
+      openKeys,
+
+      pagination
     }
   }
 });

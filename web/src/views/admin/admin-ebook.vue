@@ -36,6 +36,10 @@
           <img v-if="cover" :src="cover" alt="avatar">
         </template>
 
+        <template v-slot:category="{ text, record }">
+          <span>{{ getCategoryName(record.category1Id)}} / {{ getCategoryName(record.category2Id)}}</span>
+        </template>
+
         <template v-slot:action="{ text, record }">
           <a-space warp>
             <a-button type="primary" @click="edit(record)">
@@ -69,11 +73,8 @@
       <a-form-item label="名称">
         <a-input v-model:value="ebook.name"/>
       </a-form-item>
-      <a-form-item label="分类一">
-        <a-input v-model:value="ebook.category1Id"/>
-      </a-form-item>
-      <a-form-item label="分类二">
-        <a-input v-model:value="ebook.category2Id"/>
+      <a-form-item label="分类">
+        <a-cascader v-model:value="categoryIds" :options="level1" :field-names="{ label: 'name', value: 'id', children: 'children'}" placeholder="Please select" />
       </a-form-item>
       <a-form-item label="描述">
         <a-input v-model:value="ebook.description" type="textarea"/>
@@ -85,6 +86,7 @@
 
 <script lang="ts">
 import {defineComponent, onMounted, ref} from "vue";
+
 import axios from 'axios';
 import {message} from "ant-design-vue";
 import {Tool} from "@/util/tool"
@@ -114,12 +116,8 @@ export default defineComponent({
         dataIndex: 'name',
       },
       {
-        title: '分类一',
-        dataIndex: 'category1Id',
-      },
-      {
-        title: '分类二',
-        dataIndex: 'category2Id',
+        title: '分类',
+        slots: {customRender: 'category'}
       },
       {
         title: '文档数',
@@ -139,6 +137,39 @@ export default defineComponent({
         slots: {customRender: 'action'}
       },
     ];
+
+
+    const level1 = ref();
+    let categorys: any;
+
+    /**
+     * 分类数据查询
+     */
+    const handleQueryCategory = () => {
+      loading.value = true;
+      axios.get("/category/all").then((response) => {
+        loading.value = false;
+        const data = response.data;
+        categorys = data.data;
+        if (data.status == 0) {
+          level1.value = [];
+          level1.value = Tool.array2Tree(categorys, 0);
+        } else {
+          message.error(data.msg);
+        }
+
+      });
+    };
+
+    const getCategoryName = (cid: number) => {
+      let result = "";
+      categorys.forEach((item: any) => {
+        if (item.id === cid) {
+          result = item.name;
+        }
+      });
+      return result;
+    }
 
     /**
      * 数据查询
@@ -180,13 +211,16 @@ export default defineComponent({
     /**
      * 表单
      */
-    const ebook = ref({});
+    const categoryIds = ref();
+    const ebook = ref();
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    console.log('ebook----', ebook);
     const handleModalOk = () => {
       modalLoading.value = true;
-
+      console.log('categoryIds=>', categoryIds.value);
+      console.log('categoryIds=>', categoryIds);
+      ebook.value.category1Id = categoryIds.value[0];
+      ebook.value.category2Id = categoryIds.value[1];
       axios.post("/ebook/save", ebook.value).then((response) => {
         const data = response.data;
         if (data.status == 0) {
@@ -208,16 +242,16 @@ export default defineComponent({
      * 编辑
      */
     const edit = (record: any) => {
-      console.log("on___edit-----", record);
       modalVisible.value = true;
       ebook.value = Tool.copy(record);
+      // ebook.value = record;
+      categoryIds.value = [ebook.value.category1Id, ebook.value.category2Id]
     };
 
     /**
      * 新增
      */
     const add = () => {
-      console.log("on___add-----");
       modalVisible.value = true;
       ebook.value = {};
     };
@@ -240,6 +274,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      handleQueryCategory();
       handleQuery({
         page: 1,
         size: pagination.value.pageSize
@@ -253,11 +288,14 @@ export default defineComponent({
       loading,
       handleTableChange,
       param,
+      level1,
+      categoryIds,
 
       modalVisible,
       modalLoading,
       ebook,
       handleModalOk,
+      getCategoryName,
 
       handleQuery,
       edit,

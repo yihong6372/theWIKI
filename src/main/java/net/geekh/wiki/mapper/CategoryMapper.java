@@ -27,4 +27,6 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category row);
 
     int updateByPrimaryKey(Category row);
+
+    List<Category> selectAll();
 }

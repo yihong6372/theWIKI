@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author YIHONG
  * @Description
@@ -26,11 +28,12 @@ public class CategoryController {
 
     private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
 
+    @GetMapping("/all")
+    public CommonResponseVo<List<CategoryVo>> all() {
+        return categoryService.all();
+    }
     @GetMapping("/list")
     public CommonResponseVo<PageVo<CategoryVo>> list(@Valid CategoryQueryForm form) {
-
-        System.out.println(form);
-        log.info("aaa==>{}",form);
 
         PageVo<CategoryVo> pageVo = categoryService.list(form);
         return new CommonResponseVo<PageVo<CategoryVo>>(0,pageVo);
@@ -38,8 +41,7 @@ public class CategoryController {
 
     @PostMapping("/save")
     public  CommonResponseVo save(@RequestBody CategorySaveForm saveForm){
-        CommonResponseVo save = categoryService.save(saveForm);
-        return save;
+        return categoryService.save(saveForm);
     }
 
     @DeleteMapping("/delete/{id}")

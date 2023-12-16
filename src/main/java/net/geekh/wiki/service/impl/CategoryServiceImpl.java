@@ -38,9 +38,11 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
     private SnowFlake snowFlake;
 
+
     @Override
     public PageVo<CategoryVo> list(CategoryQueryForm form) {
         CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort");
         CategoryExample.Criteria criteria = categoryExample.createCriteria();
         if (!ObjectUtils.isEmpty(form.getName())) {
             criteria.andNameLike("%" + form.getName() + "%");
@@ -56,6 +58,15 @@ public class CategoryServiceImpl implements ICategoryService {
 
         Log.info("asfds{}",pageInfo);
         return pageVo;
+    }
+
+    @Override
+    public CommonResponseVo<List<CategoryVo>> all() {
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort");
+        List<Category> categories = categoryMapper.selectByExample(categoryExample);
+        List<CategoryVo> categoryVos = CopyUtil.copyList(categories, CategoryVo.class);
+        return new CommonResponseVo<List<CategoryVo>>(0, categoryVos);
     }
 
     @Override

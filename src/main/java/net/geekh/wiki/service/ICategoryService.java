@@ -6,6 +6,8 @@ import net.geekh.wiki.vo.CommonResponseVo;
 import net.geekh.wiki.vo.CategoryVo;
 import net.geekh.wiki.vo.PageVo;
 
+import java.util.List;
+
 /**
  * @Author YIHONG
  * @Description
@@ -14,6 +16,8 @@ import net.geekh.wiki.vo.PageVo;
 public interface ICategoryService {
 
     PageVo<CategoryVo> list(CategoryQueryForm form);
+
+    CommonResponseVo<List<CategoryVo>> all();
 
     CommonResponseVo save(CategorySaveForm form);
 

@@ -13,7 +13,7 @@ public class SnowFlake {
     /**
      * 起始的时间戳
      */
-    private final static long START_STMP = 1609459200000L; // 2021-01-01 00:00:00
+    private final static long START_STMP = 1702655699643L; // 2021-01-01 00:00:00
 
     /**
      * 每一部分占用的位数
@@ -100,7 +100,7 @@ public class SnowFlake {
 
     public static void main(String[] args) throws ParseException {
         // 时间戳
-        // System.out.println(System.currentTimeMillis());
+         System.out.println(System.currentTimeMillis());
         // System.out.println(new Date().getTime());
         //
         // String dateTime = "2021-01-01 08:00:00";

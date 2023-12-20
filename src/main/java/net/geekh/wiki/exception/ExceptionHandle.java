@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Objects;
+
 /**
  * @Author YIHONG
  * @Description
@@ -18,6 +20,6 @@ public class ExceptionHandle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public CommonResponseVo MethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return new CommonResponseVo(-1, e.getFieldError().getDefaultMessage());
+        return new CommonResponseVo(-1, "参数错误  " + Objects.requireNonNull(e.getBindingResult().getFieldError()).getField()+ " " +e.getBindingResult().getFieldError().getDefaultMessage());
     }
 }

@@ -58,29 +58,43 @@
     </a-layout-content>
   </a-layout>
   <a-modal
-      title="分类表单"
+      title="文档表单"
       v-model:open="modalVisible"
       :confirm-loading="modalLoading"
       @ok="handleModalOk">
-    <a-form :model="category" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+    <a-form :model="doc" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="名称">
-        <a-input v-model:value="category.name"/>
+        <a-input v-model:value="doc.name"/>
       </a-form-item>
       <a-form-item label="顺序">
-        <a-input v-model:value="category.sort"/>
+        <a-input v-model:value="doc.sort"/>
       </a-form-item>
       <a-form-item label="父分类">
-        <a-input v-model:value="category.parent"/>
+        <a-tree-select
+            v-model:value="doc.parent"
+            show-search
+            style="width: 100%"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="Please select"
+            allow-clear
+            tree-default-expand-all
+            :tree-data="treeSelectData"
+            :fieldNames="{label: 'name', key: 'id', value: 'id', children: 'children'}"
+        >
+        </a-tree-select>
+      </a-form-item>
+      <a-form-item label="父分类">
+        <a-input v-model:value="doc.parent"/>
         <a-select
             ref="select"
-            v-model:value="category.parent"
-            @focus="focus"
-            @change="handleChange"
+            v-model:value="doc.parent"
         >
           <a-select-option value="0">无</a-select-option>
-          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id == c.id"  >{{c.name}}</a-select-option>
-<!--          <a-select-option value="disabled" disabled>Disabled</a-select-option>-->
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id == c.id">{{ c.name }}
+          </a-select-option>
+          <a-select-option value="disabled" disabled>Disabled</a-select-option>
         </a-select>
+
       </a-form-item>
 
     </a-form>
@@ -95,17 +109,17 @@ import {message} from "ant-design-vue";
 import {Tool} from "@/util/tool"
 
 export default defineComponent({
-  name: 'AdminCategory',
+  name: 'AdminDoc',
   setup() {
     const param = ref();
     param.value = {};
-    const categorys = ref([]);
+    const docs = ref([]);
     const pagination = ref({
       current: 1,
       pageSize: 4,
       total: 0
     });
-    console.log("onsetup...", categorys)
+    console.log("setup...", docs)
     const loading = ref(false);
 
     const columns = [
@@ -135,19 +149,27 @@ export default defineComponent({
      */
     const handleQuery = () => {
       loading.value = true;
-      axios.get("/category/all").then((response) => {
+      axios.get("/doc/all").then((response) => {
         loading.value = false;
         const data = response.data;
+        console.log('response', response);
         if (data.status == 0) {
-          categorys.value = data.data;
+          docs.value = data.data;
 
           level1.value = [];
-          level1.value = Tool.array2Tree(categorys.value, 0);
-          console.log('树形',level1.value)
+          level1.value = Tool.array2Tree(docs.value, 0);
+          console.log('树形', level1.value)
         } else {
           message.error(data.msg);
         }
 
+      }).catch((error) => {
+        console.error('请求错误', error);
+        // 在这里处理错误，比如显示错误信息
+        message.error('请求失败: ' + error.message);
+      }).finally(() => {
+        // 无论请求成功还是失败，都会执行
+        loading.value = false;
       });
     };
 
@@ -162,14 +184,16 @@ export default defineComponent({
     /**
      * 表单
      */
-    const category = ref({});
+    const treeSelectData = ref();
+    treeSelectData.value = [];
+    const doc = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    console.log('category----', category);
+    console.log('doc----', doc);
     const handleModalOk = () => {
       modalLoading.value = true;
 
-      axios.post("/category/save", category.value).then((response) => {
+      axios.post("/doc/save", doc.value).then((response) => {
         const data = response.data;
         if (data.status == 0) {
           //重新加载
@@ -179,17 +203,43 @@ export default defineComponent({
         }
         modalVisible.value = false;
         modalLoading.value = false;
-      })
-    }
+      });
+    };
+
+    const setDisable = (treeSelectData: any, id: any) => {
+      for (let i = 0; i < treeSelectData.length; i++) {
+        const node = treeSelectData[i];
+        if (node.id === id) {
+          console.log('disabled', node);
+          node.disabled = true;
+
+          const children = node.children;
+          if (Tool.isNotEmpty(children)) {
+            for (let j = 0; j < children.length; j++) {
+              setDisable(children, children[j].id);
+            }
+          }
+        } else {
+          const children = node.children;
+          if (Tool.isNotEmpty(children) ) {
+            setDisable(children, id);
+          }
+        }
+      }
+    };
 
 
     /**
      * 编辑
      */
     const edit = (record: any) => {
-      console.log("on___edit-----", record);
       modalVisible.value = true;
-      category.value = Tool.copy(record);
+      doc.value = Tool.copy(record);
+
+      treeSelectData.value = Tool.copy(level1.value);
+      setDisable(treeSelectData.value, record.id);
+
+      treeSelectData.value.unshift({id: 0, name: '无'});
     };
 
     /**
@@ -198,14 +248,18 @@ export default defineComponent({
     const add = () => {
       console.log("on___add-----");
       modalVisible.value = true;
-      category.value = {};
+      doc.value = {};
+
+      treeSelectData.value = Tool.copy(level1.value);
+
+      treeSelectData.value.unshift({id: 0, name: '无'});
     };
 
     /**
      * 删除
      */
     const handleDelete = (id: number) => {
-      axios.delete("/category/delete/" + id).then((response) => {
+      axios.delete("/doc/delete/" + id).then((response) => {
         const data = response.data;
         if (data.status == 0) {
           //成功
@@ -213,14 +267,15 @@ export default defineComponent({
         }
 
       });
-    }
+    };
+
 
     onMounted(() => {
       handleQuery();
     });
 
     return {
-      // categorys,
+      // docs,
       level1,
       pagination,
       columns,
@@ -230,13 +285,14 @@ export default defineComponent({
 
       modalVisible,
       modalLoading,
-      category,
+      doc,
       handleModalOk,
 
       handleQuery,
       edit,
       add,
       handleDelete,
+      treeSelectData
     }
   }
 });

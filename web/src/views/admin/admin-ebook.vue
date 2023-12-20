@@ -37,7 +37,7 @@
         </template>
 
         <template v-slot:category="{ text, record }">
-          <span>{{ getCategoryName(record.category1Id)}} / {{ getCategoryName(record.category2Id)}}</span>
+          <span>{{ getCategoryName(record.category1Id) }} / {{ getCategoryName(record.category2Id) }}</span>
         </template>
 
         <template v-slot:action="{ text, record }">
@@ -45,6 +45,15 @@
             <a-button type="primary" @click="edit(record)">
               编辑
             </a-button>
+
+            <router-link to="/admin/doc">
+
+              <a-button type="primary">
+                文档管理
+              </a-button>
+
+            </router-link>
+
 
             <a-popconfirm
                 title="是否删除"
@@ -74,7 +83,8 @@
         <a-input v-model:value="ebook.name"/>
       </a-form-item>
       <a-form-item label="分类">
-        <a-cascader v-model:value="categoryIds" :options="level1" :field-names="{ label: 'name', value: 'id', children: 'children'}" placeholder="Please select" />
+        <a-cascader v-model:value="categoryIds" :options="level1"
+                    :field-names="{ label: 'name', value: 'id', children: 'children'}" placeholder="Please select"/>
       </a-form-item>
       <a-form-item label="描述">
         <a-input v-model:value="ebook.description" type="textarea"/>

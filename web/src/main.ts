@@ -18,6 +18,8 @@ axios.interceptors.request.use((config) => {
 }, error => {
     return Promise.reject(error);
 });
+
+
 axios.interceptors.response.use((response) => {
     console.log('返回结果：', response);
     return response;

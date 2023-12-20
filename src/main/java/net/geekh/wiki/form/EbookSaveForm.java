@@ -1,8 +1,11 @@
 package net.geekh.wiki.form;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class EbookSaveForm {
     private Long id;
 
+    @NotBlank
     private String name;
 
     private Long category1Id;

@@ -79,38 +79,26 @@
             allow-clear
             tree-default-expand-all
             :tree-data="treeSelectData"
-            :fieldNames="{label: 'name', key: 'id', value: 'id', children: 'children'}"
+            :fieldNames="{label: 'name', value: 'id', children: 'children'}"
         >
         </a-tree-select>
       </a-form-item>
-      <a-form-item label="父分类">
-        <a-input v-model:value="doc.parent"/>
-        <a-select
-            ref="select"
-            v-model:value="doc.parent"
-        >
-          <a-select-option value="0">无</a-select-option>
-          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="doc.id == c.id">{{ c.name }}
-          </a-select-option>
-          <a-select-option value="disabled" disabled>Disabled</a-select-option>
-        </a-select>
-
-      </a-form-item>
-
     </a-form>
 
   </a-modal>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref} from "vue";
+import {defineComponent, onMounted, ref, watch} from "vue";
 import axios from 'axios';
 import {message} from "ant-design-vue";
 import {Tool} from "@/util/tool"
+import {useRoute} from "vue-router";
 
 export default defineComponent({
   name: 'AdminDoc',
   setup() {
+    const route = useRoute();
     const param = ref();
     param.value = {};
     const docs = ref([]);
@@ -186,12 +174,13 @@ export default defineComponent({
      */
     const treeSelectData = ref();
     treeSelectData.value = [];
-    const doc = ref({});
+    const doc = ref();
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    console.log('doc----', doc);
+
     const handleModalOk = () => {
       modalLoading.value = true;
+
 
       axios.post("/doc/save", doc.value).then((response) => {
         const data = response.data;
@@ -235,6 +224,7 @@ export default defineComponent({
     const edit = (record: any) => {
       modalVisible.value = true;
       doc.value = Tool.copy(record);
+      console.log('doc====', doc.value);
 
       treeSelectData.value = Tool.copy(level1.value);
       setDisable(treeSelectData.value, record.id);
@@ -248,7 +238,7 @@ export default defineComponent({
     const add = () => {
       console.log("on___add-----");
       modalVisible.value = true;
-      doc.value = {};
+      doc.value = { ebookId: route.query.ebookId };
 
       treeSelectData.value = Tool.copy(level1.value);
 

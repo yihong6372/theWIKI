@@ -82,6 +82,16 @@
             :fieldNames="{label: 'name', value: 'id', children: 'children'}"
         >
         </a-tree-select>
+
+      </a-form-item>
+      <a-form-item label="内容">
+        <div id="content">
+          <Editor
+
+              style="height: 400px; overflow-y: hidden"
+              @onCreated="handleCreated"
+          />
+        </div>
       </a-form-item>
     </a-form>
 
@@ -89,14 +99,17 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted, ref, watch} from "vue";
+import {defineComponent, onMounted, ref, watch, shallowRef} from "vue";
 import axios from 'axios';
 import {message} from "ant-design-vue";
 import {Tool} from "@/util/tool"
 import {useRoute} from "vue-router";
+import '@wangeditor/editor/dist/css/style.css'
+import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 export default defineComponent({
   name: 'AdminDoc',
+  components: { Editor, Toolbar },
   setup() {
     const route = useRoute();
     const param = ref();
@@ -177,6 +190,7 @@ export default defineComponent({
     const doc = ref();
     const modalVisible = ref(false);
     const modalLoading = ref(false);
+    const editorRef = shallowRef()
 
     const handleModalOk = () => {
       modalLoading.value = true;
@@ -244,17 +258,33 @@ export default defineComponent({
 
 
     /**
+     * 富文本
+     * @param editor
+     */
+
+    const handleCreated = (editor: any) => {
+      console.log("-=========----ss-fsa--------------")
+      console.log('created', editor);
+      editorRef.value = editor // 记录 editor 实例，重要！
+
+      console.log("sfwiqroyurio2yu1ioh45iu12h5iuhui");
+    }
+
+
+    /**
      * 编辑
      */
+
     const edit = (record: any) => {
       modalVisible.value = true;
       doc.value = Tool.copy(record);
-      console.log('doc====', doc.value);
+      console.log('edit====', doc.value);
 
       treeSelectData.value = Tool.copy(level1.value);
       setDisable(treeSelectData.value, record.id);
 
       treeSelectData.value.unshift({id: 0, name: '无'});
+
     };
 
     /**
@@ -299,12 +329,14 @@ export default defineComponent({
       loading,
       handleTableChange,
       param,
+      editorRef,
 
       modalVisible,
       modalLoading,
       doc,
       handleModalOk,
       getDeleteIds,
+      handleCreated,
 
       handleQuery,
       edit,

@@ -101,4 +101,17 @@ public class DocServiceImpl implements IDocService {
         }
         return new CommonResponseVo(0, "删除成功");
     }
+
+
+    @Override
+    public CommonResponseVo delete(List<String> idsStr) {
+        DocExample docExample = new DocExample();
+        DocExample.Criteria criteria = docExample.createCriteria();
+        criteria.andIdIn(idsStr);
+        int i = docMapper.deleteByExample(docExample);
+        if (i == 0) {
+            return new CommonResponseVo(-1, "删除失败");
+        }
+        return new CommonResponseVo(0, "删除成功");
+    }
 }

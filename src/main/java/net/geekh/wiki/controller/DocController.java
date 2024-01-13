@@ -11,6 +11,7 @@ import net.geekh.wiki.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,9 +44,13 @@ public class DocController {
         return save;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public CommonResponseVo delete(@PathVariable Long id){
-        return docService.delete(id);
+    @DeleteMapping("/delete/{idsStr}")
+    public CommonResponseVo delete(@PathVariable String idsStr){
+        System.out.println("ids,,"+ idsStr);
+        List<String> list = Arrays.asList(idsStr.split(","));
+        System.out.println("list,,"+ list);
+
+        return docService.delete(list);
 
     }
 

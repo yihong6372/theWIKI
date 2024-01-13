@@ -24,4 +24,6 @@ public interface IDocService {
 
     CommonResponseVo delete(Long docId);
 
+    CommonResponseVo delete(List<String> idsStr);
+
 }

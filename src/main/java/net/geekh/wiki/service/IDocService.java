@@ -18,12 +18,14 @@ public interface IDocService {
 
     PageVo<DocVo> list(DocQueryForm form);
 
-    CommonResponseVo<List<DocVo>> all();
+    CommonResponseVo<List<DocVo>> all(Long ebookId);
 
     CommonResponseVo save(DocSaveForm form);
 
     CommonResponseVo delete(Long docId);
 
     CommonResponseVo delete(List<String> idsStr);
+
+    CommonResponseVo findContent(Long id);
 
 }

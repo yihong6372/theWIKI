@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.LongFunction;
 
 /**
  * @Author YIHONG
@@ -26,9 +27,9 @@ public class DocController {
     @Autowired
     private IDocService docService;
 
-    @GetMapping("/all")
-    public CommonResponseVo<List<DocVo>> all() {
-        return docService.all();
+    @GetMapping("/all/{ebookId}")
+    public CommonResponseVo<List<DocVo>> all(@PathVariable Long ebookId) {
+        return docService.all(ebookId);
     }
 
     @GetMapping("/list")
@@ -52,6 +53,12 @@ public class DocController {
 
         return docService.delete(list);
 
+    }
+
+    @GetMapping("/find-content/{id}")
+    public CommonResponseVo findContent(@PathVariable Long id) {
+        CommonResponseVo vo = docService.findContent(id);
+        return vo;
     }
 
 }

@@ -2,12 +2,10 @@ package net.geekh.wiki.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import net.geekh.wiki.domain.Category;
-import net.geekh.wiki.domain.CategoryExample;
-import net.geekh.wiki.domain.Doc;
-import net.geekh.wiki.domain.DocExample;
+import net.geekh.wiki.domain.*;
 import net.geekh.wiki.form.DocQueryForm;
 import net.geekh.wiki.form.DocSaveForm;
+import net.geekh.wiki.mapper.ContentMapper;
 import net.geekh.wiki.mapper.DocMapper;
 import net.geekh.wiki.service.IDocService;
 import net.geekh.wiki.util.CopyUtil;
@@ -39,16 +37,20 @@ public class DocServiceImpl implements IDocService {
     private DocMapper docMapper;
 
     @Autowired
+    private ContentMapper contentMapper;
+
+    @Autowired
     private SnowFlake snowFlake;
 
 
     @Override
-    public CommonResponseVo<List<DocVo>> all() {
+    public CommonResponseVo<List<DocVo>> all(Long ebookId) {
         DocExample docExample = new DocExample();
+        docExample.createCriteria().andEbookIdEqualTo(ebookId);
         docExample.setOrderByClause("sort");
         List<Doc> Docs = docMapper.selectByExample(docExample);
         List<DocVo> DocVos = CopyUtil.copyList(Docs, DocVo.class);
-        return new CommonResponseVo<List<DocVo>>(0, DocVos);
+        return new CommonResponseVo(0, DocVos);
     }
 
     @Override
@@ -75,9 +77,12 @@ public class DocServiceImpl implements IDocService {
     public CommonResponseVo save(DocSaveForm form) {
 
         Doc doc = CopyUtil.copy(form, Doc.class);
+        Content content = CopyUtil.copy(form, Content.class);
         if (ObjectUtils.isEmpty(form.getId())) {
             doc.setId(snowFlake.nextId());
+            content.setId(doc.getId());
             int i = docMapper.insertSelective(doc);
+            int j = contentMapper.insert(content);
             if (i == 0) {
                 return new CommonResponseVo(-1, "新增失败");
                 //TODO 服务异常处理
@@ -85,9 +90,14 @@ public class DocServiceImpl implements IDocService {
         } else {
 
             int i = docMapper.updateByPrimaryKeySelective(doc);
-            if (i == 0) {
+            int j = contentMapper.updateByPrimaryKeyWithBLOBs(content);
+            if (i == 0 ) {
                 return new CommonResponseVo(-1, "编辑失败");
                 //TODO 服务异常处理
+            }
+            if (j ==0 ) {
+                content.setId(doc.getId());
+                contentMapper.insert(content);
             }
         }
         return new CommonResponseVo(0, "成功");
@@ -113,5 +123,15 @@ public class DocServiceImpl implements IDocService {
             return new CommonResponseVo(-1, "删除失败");
         }
         return new CommonResponseVo(0, "删除成功");
+    }
+
+    @Override
+    public CommonResponseVo findContent(Long id) {
+        Content content = contentMapper.selectByPrimaryKey(id);
+        if (ObjectUtils.isEmpty(content)) {
+            return new CommonResponseVo(0, "");
+        } else {
+            return new CommonResponseVo(0, content);
+        }
     }
 }

@@ -206,16 +206,15 @@ export default defineComponent({
       axios.get("/doc/all/" + route.query.ebookId).then((response) => {
         loading.value = false;
         const data = response.data;
-        console.log('response', response);
+
         if (data.status == 0) {
           docs.value = data.data;
-
           level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log('树形', level1.value);
-
           treeSelectData.value = Tool.copy(level1.value);
           treeSelectData.value.unshift({id: 0, name: '无'});
+
         } else {
           message.error(data.msg);
         }

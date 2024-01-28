@@ -25,12 +25,12 @@
           </div>
           <div class="wangeditor" :innerHTML="html"></div>
           <div class="vote-div">
-            <a-button type="primary" shape="round" :size="'large'" @click="vote">
+            <a-button type="primary" shape="round" :size="'large'" @click="vote" v-show="doc">
               <template #icon><LikeOutlined /> &nbsp;点赞：{{doc.voteCount}} </template>
             </a-button>
-          </div>
-        </a-col>
+          </div>        </a-col>
       </a-row>
+
     </a-layout-content>
   </a-layout>
 </template>
@@ -94,12 +94,13 @@
 
             level1.value = [];
             level1.value = Tool.array2Tree(docs.value, 0);
-
-            if (Tool.isNotEmpty(level1)) {
+            if (Tool.isNotEmpty(level1.value)) {
               defaultSelectedKeys.value = [level1.value[0].id];
               handleQueryContent(level1.value[0].id);
               // 初始显示文档信息
               doc.value = level1.value[0];
+            } else {
+              message.info("文档为空")
             }
           } else {
             message.error(data.message);
@@ -124,8 +125,9 @@
       const vote = () => {
         axios.get('/doc/vote/' + doc.value.id).then((response) => {
           const data = response.data;
-          if (data.success) {
+          if (data.status === 0) {
             doc.value.voteCount++;
+            message.success(data.msg);
           } else {
             message.error(data.message);
           }

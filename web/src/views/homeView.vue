@@ -38,10 +38,21 @@
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
-              <span v-for="{ icon, text } in actions" :key="icon">
-                <component :is="icon" style="margin-right: 8px" />
-                {{ text }}
+<!--              <span v-for="{ icon, text } in actions" :key="icon">-->
+<!--                <component :is="icon" style="margin-right: 8px" />-->
+<!--                {{ text }}-->
+<!--              </span>-->
+              <span>
+                <component :is="FileOutlined" style="margin-right: 8px" />
+                {{item.docCount}}
+              </span><span>
+                <component :is="UserOutlined" style="margin-right: 8px" />
+                {{item.viewCount}}
+              </span><span>
+                <component :is="LikeFilled" style="margin-right: 8px" />
+                {{item.voteCount}}
               </span>
+
             </template>
 
             <a-list-item-meta :description="item.description">
@@ -61,9 +72,10 @@
 import {defineComponent, onMounted, ref, reactive, toRef, h} from 'vue';
 import axios from 'axios'
 import {
+  FileOutlined, LikeFilled,
   LikeOutlined,
   MessageOutlined,
-  StarOutlined
+  StarOutlined, UserOutlined
 } from "@ant-design/icons-vue";
 import {Tool} from "@/util/tool";
 import { message} from "ant-design-vue";
@@ -83,6 +95,7 @@ const actions: any= [
 
 export default defineComponent({
   name: 'HomeView',
+  methods: {LikeFilled, UserOutlined, FileOutlined},
   setup() {
     console.log("setup......");
     const ebooks = ref();

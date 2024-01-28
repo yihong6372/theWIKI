@@ -28,4 +28,8 @@ public interface IDocService {
 
     CommonResponseVo findContent(Long id);
 
+    CommonResponseVo vote(Long id);
+
+    void updateEbookInfo();
+
 }

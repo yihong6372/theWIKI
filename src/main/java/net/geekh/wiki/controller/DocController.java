@@ -61,4 +61,11 @@ public class DocController {
         return vo;
     }
 
+    @GetMapping("/vote/{id}")
+    public CommonResponseVo vote(@PathVariable Long id) {
+        CommonResponseVo commonResponseVo = docService.vote(id);
+        return commonResponseVo;
+
+    }
+
 }

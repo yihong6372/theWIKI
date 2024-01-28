@@ -1,16 +1,15 @@
 package net.geekh.wiki.service.impl;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import net.geekh.wiki.domain.*;
 import net.geekh.wiki.form.DocQueryForm;
 import net.geekh.wiki.form.DocSaveForm;
 import net.geekh.wiki.mapper.ContentMapper;
 import net.geekh.wiki.mapper.DocMapper;
+import net.geekh.wiki.mapper.DocMapperCust;
 import net.geekh.wiki.service.IDocService;
 import net.geekh.wiki.util.CopyUtil;
 import net.geekh.wiki.util.SnowFlake;
-import net.geekh.wiki.vo.CategoryVo;
 import net.geekh.wiki.vo.CommonResponseVo;
 import net.geekh.wiki.vo.DocVo;
 import net.geekh.wiki.vo.PageVo;
@@ -41,6 +40,9 @@ public class DocServiceImpl implements IDocService {
 
     @Autowired
     private SnowFlake snowFlake;
+
+    @Autowired
+    private DocMapperCust docMapperCust;
 
 
     @Override
@@ -131,7 +133,19 @@ public class DocServiceImpl implements IDocService {
         if (ObjectUtils.isEmpty(content)) {
             return new CommonResponseVo(0, "");
         } else {
+            docMapperCust.increaseViewCount(id);
             return new CommonResponseVo(0, content);
         }
+    }
+
+    @Override
+    public CommonResponseVo vote(Long id) {
+        docMapperCust.increaseVoteCount(id);
+        return new CommonResponseVo<>(0, "点赞成功");
+    }
+
+    @Override
+    public void updateEbookInfo() {
+        docMapperCust.updateEbookInfo();
     }
 }

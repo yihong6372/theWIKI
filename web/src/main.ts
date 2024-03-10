@@ -28,7 +28,7 @@ axios.interceptors.response.use((response) => {
     return Promise.reject(error);
 });
 
-const app = createApp(App)
+const app = createApp(App);
 
     app.use(Antd).use(store).use(router).mount('#app');
 

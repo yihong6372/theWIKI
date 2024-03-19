@@ -18,7 +18,7 @@ public class DocJob {
     @Autowired
     private DocMapperCust docMapperCust;
 
-    @Scheduled(cron = "5/30 * * * * ?")
+    @Scheduled(cron = "5 */30 * * * ?")
     public void cron() {
         log.info("开始更新电子书数据！");
         long start = System.currentTimeMillis();

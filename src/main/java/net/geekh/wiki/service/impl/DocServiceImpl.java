@@ -9,16 +9,20 @@ import net.geekh.wiki.mapper.DocMapper;
 import net.geekh.wiki.mapper.DocMapperCust;
 import net.geekh.wiki.service.IDocService;
 import net.geekh.wiki.util.CopyUtil;
+import net.geekh.wiki.util.RequestContext;
 import net.geekh.wiki.util.SnowFlake;
 import net.geekh.wiki.vo.CommonResponseVo;
 import net.geekh.wiki.vo.DocVo;
 import net.geekh.wiki.vo.PageVo;
+import net.geekh.wiki.websocket.WebSocketServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.nio.charset.CharsetEncoder;
 import java.util.List;
 
 /**
@@ -43,6 +47,9 @@ public class DocServiceImpl implements IDocService {
 
     @Autowired
     private DocMapperCust docMapperCust;
+
+    @Autowired
+    private WebSocketServer webSocketServer;
 
 
     @Override
@@ -138,10 +145,19 @@ public class DocServiceImpl implements IDocService {
         }
     }
 
+    /**
+     * 点赞
+     */
     @Override
     public CommonResponseVo vote(Long id) {
+        String ip = RequestContext.getRemoteAddr();
         docMapperCust.increaseVoteCount(id);
+
+        //通知消息
+        Doc doc = docMapper.selectByPrimaryKey(id);
+        webSocketServer.sendInfo(doc.getName() + "被点赞");
         return new CommonResponseVo<>(0, "点赞成功");
+
     }
 
     @Override

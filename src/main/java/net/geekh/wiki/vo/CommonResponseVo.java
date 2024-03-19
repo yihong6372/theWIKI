@@ -37,4 +37,7 @@ public class CommonResponseVo<T> {
     }
 
 
+    public CommonResponseVo() {
+
+    }
 }

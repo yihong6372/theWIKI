@@ -111,6 +111,9 @@
           </a-form>
         </a-col>
       </a-row>
+      <a-drawer width="900" placement="right" :closable="false" :visible="drawerVisible" @close="onDrawerClose">
+        <div class="wangeditor" :innerHTML="previewHtml"></div>
+      </a-drawer>
     </a-layout-content>
   </a-layout>
 <!--  <a-modal-->
@@ -313,7 +316,7 @@ export default defineComponent({
         };
 
 
-    const valueHtml = ref('<p>hello</p>');
+    const valueHtml = ref('');
 
     /**
      * 富文本
@@ -330,12 +333,8 @@ export default defineComponent({
       axios.get("/doc/find-content/" + doc.value.id).then((response) => {
         const data = response.data;
         const editor = editorRef.value;
-        console.log('cont==>endit', editor);
-        console.log('cont==>data', data);
         if (data.status == 0) {
-          console.log('datacontant',data.data.content)
           valueHtml.value = data.data.content;
-          console.log('cont==>endit22', editor);
         } else {
           console.log('error')
           message.error(data.message);
@@ -401,6 +400,18 @@ export default defineComponent({
       handleQuery();
     });
 
+    const drawerVisible = ref(false);
+    const previewHtml = ref();
+    const handlePreviewContent = () => {
+      // const html = editorRef.value.txt.html();
+      previewHtml.value = valueHtml.value;
+      drawerVisible.value = true;
+    };
+    const onDrawerClose = () => {
+      drawerVisible.value = false;
+    };
+
+
     return {
       // docs,
       level1,
@@ -423,7 +434,11 @@ export default defineComponent({
       edit,
       add,
       handleDelete,
-      treeSelectData
+      treeSelectData,
+      drawerVisible,
+      previewHtml,
+      handlePreviewContent,
+      onDrawerClose,
     }
   }
 });

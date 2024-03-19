@@ -92,22 +92,22 @@ public class DocServiceImpl implements IDocService {
             content.setId(doc.getId());
             int i = docMapper.insertSelective(doc);
             int j = contentMapper.insert(content);
-            if (i == 0) {
-                return new CommonResponseVo(-1, "新增失败");
+            if (i == 0 || j == 0) {
+                return new CommonResponseVo(-1, "后端新增失败");
                 //TODO 服务异常处理
             }
         } else {
 
             int i = docMapper.updateByPrimaryKeySelective(doc);
             int j = contentMapper.updateByPrimaryKeyWithBLOBs(content);
-            if (i == 0 ) {
-                return new CommonResponseVo(-1, "编辑失败");
+            if (i == 0 || j == 0) {
+                return new CommonResponseVo(-1, "后端编辑失败");
                 //TODO 服务异常处理
             }
-            if (j ==0 ) {
-                content.setId(doc.getId());
-                contentMapper.insert(content);
-            }
+//            if (j ==0 ) {
+//                content.setId(doc.getId());
+//                contentMapper.insert(content);
+//            }
         }
         return new CommonResponseVo(0, "成功");
     }
@@ -138,7 +138,7 @@ public class DocServiceImpl implements IDocService {
     public CommonResponseVo findContent(Long id) {
         Content content = contentMapper.selectByPrimaryKey(id);
         if (ObjectUtils.isEmpty(content)) {
-            return new CommonResponseVo(0, "");
+            return new CommonResponseVo(0, "没有内容");
         } else {
             docMapperCust.increaseViewCount(id);
             return new CommonResponseVo(0, content);

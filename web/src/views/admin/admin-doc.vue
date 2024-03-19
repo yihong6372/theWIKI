@@ -212,7 +212,6 @@ export default defineComponent({
 
         if (data.status == 0) {
           docs.value = data.data;
-          level1.value = [];
           level1.value = Tool.array2Tree(docs.value, 0);
           console.log('树形', level1.value);
           treeSelectData.value = Tool.copy(level1.value);
@@ -252,6 +251,8 @@ export default defineComponent({
     const editorRef = shallowRef()
     // editorRef.value.config.zIndex = 0;
 
+
+    const valueHtml = ref('hello');
     const handleSave = () => {
       modalLoading.value = true;
       doc.value.content = valueHtml.value;
@@ -262,7 +263,7 @@ export default defineComponent({
           //重新加载
           handleQuery();
         } else {
-          message.success("保存成功");
+          message.success("保存失败");
         }
         modalLoading.value = false;
       });
@@ -316,7 +317,6 @@ export default defineComponent({
         };
 
 
-    const valueHtml = ref('');
 
     /**
      * 富文本
@@ -332,12 +332,12 @@ export default defineComponent({
     const handleQueryContent = () => {
       axios.get("/doc/find-content/" + doc.value.id).then((response) => {
         const data = response.data;
-        const editor = editorRef.value;
-        if (data.status == 0) {
+        // const editor = editorRef.value;
+        if (data.status == 0 && !!data.data.content) {
           valueHtml.value = data.data.content;
         } else {
           console.log('error')
-          message.error(data.message);
+          message.info(data.msg);
         }
       });
     };
@@ -353,7 +353,6 @@ export default defineComponent({
       doc.value = Tool.copy(record);
 
       handleQueryContent();
-      console.log('edit====', doc.value);
 
       treeSelectData.value = Tool.copy(level1.value);
 

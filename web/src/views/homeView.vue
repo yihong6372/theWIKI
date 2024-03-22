@@ -32,6 +32,7 @@
 
       <div class="welcome" v-show="isShowWelcome">
         <h1>welcome</h1>
+        <the-welcome/>
       </div>
 
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
@@ -79,6 +80,7 @@ import {
 } from "@ant-design/icons-vue";
 import {Tool} from "@/util/tool";
 import { message} from "ant-design-vue";
+import TheWelcome from "@/components/the-welcome.vue";
 
 
 const pagination = {
@@ -95,6 +97,9 @@ const actions: any= [
 
 export default defineComponent({
   name: 'HomeView',
+  components: {
+    TheWelcome
+  },
   methods: {LikeFilled, UserOutlined, FileOutlined},
   setup() {
     console.log("setup......");

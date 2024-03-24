@@ -125,8 +125,10 @@
       const getStatistic = () => {
         axios.get('/ebook-snapshot/get-statistic').then((response) => {
           const data = response.data;
-          if (data) {
+          console.log(data)
+          if (data.data.length > 1) {
             const statisticResp = data.data;
+            console.log("昨天有数据：",statisticResp)
             statistic.value.viewCount = statisticResp[1].viewCount;
             statistic.value.voteCount = statisticResp[1].voteCount;
             statistic.value.todayViewCount = statisticResp[1].viewIncrease;
@@ -140,7 +142,23 @@
             statistic.value.todayViewIncrease = parseInt(String(statisticResp[1].viewIncrease / nowRate));
             // todayViewIncreaseRate：今日预计增长率
             statistic.value.todayViewIncreaseRate = (statistic.value.todayViewIncrease - statisticResp[0].viewIncrease) / statisticResp[0].viewIncrease * 100;
-            console.log('today->', statistic.value.todayViewIncreaseRate);
+            statistic.value.todayViewIncreaseRateAbs = Math.abs(statistic.value.todayViewIncreaseRate);
+          } else {
+            const statisticResp = data.data;
+            console.log("昨天没有数据：",statisticResp)
+            statistic.value.viewCount = statisticResp[0].viewCount;
+            statistic.value.voteCount = statisticResp[0].voteCount;
+            statistic.value.todayViewCount = statisticResp[0].viewIncrease;
+            statistic.value.todayVoteCount = statisticResp[0].voteIncrease;
+            console.log('snapshot')
+
+            // 按分钟计算当前时间点，占一天的百分比
+            const now = new Date();
+            const nowRate = (now.getHours() * 60 + now.getMinutes()) / (60 * 24);
+            // console.log(nowRate)
+            statistic.value.todayViewIncrease = parseInt(String(statisticResp[0].viewIncrease / nowRate));
+            // todayViewIncreaseRate：今日预计增长率
+            statistic.value.todayViewIncreaseRate = (statistic.value.todayViewIncrease - 0) ;
             statistic.value.todayViewIncreaseRateAbs = Math.abs(statistic.value.todayViewIncreaseRate);
           }
         });
@@ -214,6 +232,8 @@
             }
           ]
         };
+
+
 
         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);

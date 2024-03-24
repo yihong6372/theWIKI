@@ -12,8 +12,13 @@ axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 /**
  * axios 拦截器
  */
+
+const token  = localStorage.getItem("token") || '';
 axios.interceptors.request.use((config) => {
     console.log('请求参数：', config);
+    if (token) {
+        config.headers['token'] = token;
+    }
     return config;
 }, error => {
     return Promise.reject(error);

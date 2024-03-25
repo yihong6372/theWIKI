@@ -30,10 +30,10 @@
         :style="{ background: '#fff', padding: '20px', margin: 0, minHeight: '280px'}"
     >
 
-      <div class="welcome" v-show="isShowWelcome">
-        <h1>welcome</h1>
-        <the-welcome/>
-      </div>
+<!--      <div class="welcome" v-show="isShowWelcome">-->
+<!--        <h1>welcome</h1>-->
+<!--        <the-welcome/>-->
+<!--      </div>-->
 
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
         <template #renderItem="{ item }">

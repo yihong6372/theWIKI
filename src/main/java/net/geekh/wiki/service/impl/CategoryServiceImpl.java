@@ -56,7 +56,6 @@ public class CategoryServiceImpl implements ICategoryService {
         pageVo.setTotal(pageInfo.getTotal());
         pageVo.setList(categoryVos);
 
-        Log.info("asfds{}",pageInfo);
         return pageVo;
     }
 

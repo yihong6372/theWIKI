@@ -103,7 +103,7 @@
               message.info("文档为空")
             }
           } else {
-            message.error(data.message);
+            message.error(data.msg);
           }
         });
       };
@@ -129,7 +129,7 @@
             doc.value.voteCount++;
             message.success(data.msg);
           } else {
-            message.error(data.message);
+            message.error(data.msg);
           }
         });
       };

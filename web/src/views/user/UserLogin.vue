@@ -56,10 +56,12 @@ import {message} from "ant-design-vue";
 import axios from "axios";
 import store from "@/store";
 import TestView from "@/views/user/TestView.vue";
-import {useRoute, useRouter} from "vue-router";
+import { useRouter} from "vue-router";
+import jwtDecode from 'jwt-decode';
+
+
 
 console.log('UserLoginView');
-const route = useRoute();
 
 interface FormState {
   userName: string;
@@ -83,10 +85,10 @@ const onFinishFailed = (errorInfo: any) => {
 };
 const router = useRouter();
 const login = () => {
-  axios.post('http://localhost:8080/user/login', formState).then((response) => {
+  axios.post('/user/login', formState).then((response) => {
     let respData = response.data;
     console.log(respData);
-    if (respData.code == 200) {
+    if (respData.status === 200) {
       // store.commit("setUser", respData.data.token);
       localStorage.setItem('token', respData.data.token);
       localStorage.setItem('user', 'testLogin');

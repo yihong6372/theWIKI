@@ -62,9 +62,8 @@ import type {MenuProps} from 'ant-design-vue';
 import axios from "axios";
 import {message} from "ant-design-vue";
 import {useRoute, useRouter} from "vue-router";
-import Router from "@/router";
 import {onMounted, ref} from "vue";
-
+import { jwtDecode } from 'jwt-decode';
 const router = useRouter();
 const user = ref({
   id: '',
@@ -95,9 +94,9 @@ const handleLoginMenuClick: MenuProps['onClick'] = e => {
 function logout() {
   console.log('logout');
   // router.push('/user');
-  axios.get("http://localhost:8080/user/logout").then((response) => {
+  axios.get("/user/logout").then((response) => {
     let data = response.data;
-    if (data.code === 200) {
+    if (data.status === 200) {
       message.success(data.msg);
       localStorage.setItem('token', '');
       localStorage.setItem('user', '');
@@ -110,7 +109,7 @@ function logout() {
 }
 
 function resetUser() {
-  let a = localStorage.getItem('user');
+  let a = localStorage.getItem('token');
   if (a) {
     user.value.id = '1';
     user.value.name = a || '';
@@ -120,8 +119,21 @@ function resetUser() {
   }
 }
 
+const jwt :any = localStorage.getItem('token');
+const decodedToken = ref({});
+console.log('jwt',jwt);
+function decodeJwt() {
+  try {
+    decodedToken.value = jwtDecode(jwt);
+    console.log('jwt',decodedToken.value);
+  } catch (error) {
+    console.error('jwt解析失败', error);
+  }
+}
+
 onMounted(() => {
   resetUser()
+  decodeJwt();
 })
 
 

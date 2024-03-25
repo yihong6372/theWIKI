@@ -112,7 +112,7 @@ const rules: Record<string, Rule[]> = {
 const handleFinish = (values: FormState) => {
   console.log('handleFinish=>',values, formState, formRef);
 
-  axios.post('http://localhost:8080/user/register',formState).then((response) => {
+  axios.post('/user/register',formState).then((response) => {
     const data = response.data;
     if (data.code === 200) {
       message.success(data.msg);

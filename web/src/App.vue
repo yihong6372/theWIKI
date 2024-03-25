@@ -1,6 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-top-side-2">
-    <TheHeader/>
+<!--    <TheHeader/>-->
     <router-view/>
     <TheFooter/>
   </a-layout>

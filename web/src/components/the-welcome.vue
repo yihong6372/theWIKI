@@ -7,8 +7,8 @@
       <div>3. 左侧菜单是动态加载的，登录后在分类管理可配置</div>
       <div>4. 文档树可无限级扩展，支持文字、图片、<b>视频</b></div>
       <div>你也想有个WIKI知识库吗？，<b>配套视频课程</b>：
-        <a href="https://coding.imooc.com/class/474.html" target="_blank">
-        《SpringBoot知识体系+Vue3全家桶 前后端分离 实战WIKI知识库系统》
+        <a href="#" target="_blank">
+        知识库系统》
         </a>
       </div>
     </div>
@@ -291,12 +291,24 @@
   });
 </script>
 <style scoped>
-  .tip {
-    padding: 10px 5px;
-    margin-bottom: 20px;
-    color: red;
-    border: 1px solid transparent;
-    background: linear-gradient(white,white) padding-box,repeating-linear-gradient(-45deg, black 0, black 25%, white 0, white 50%) 0/.6em .6em;
-    animation:ants 12s linear infinite;
+.tip {
+  padding: 10px 5px;
+  margin-bottom: 20px;
+  color: rgba(216, 0, 12, 0.99); /* 使用具体的色号来代替红色，增强可控性 */
+  border: 1px solid #ffbaba; /* 给予边框一种淡红色，以突出警告效果 */
+  background: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%),
+  repeating-linear-gradient(-45deg, #ffbdbd 0, #ffbdbd 25%, #ffffff 25%, #ffffff 50%);
+  background-size: 100% 100%, 10px 10px; /* 调整斜条纹背景的大小 */
+  animation: ants 12s linear infinite;
+  border-radius: 4px; /* 添加圆角以获得更现代的视觉效果 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 添加阴影提升层次感 */
+}
+
+/* 定义动画 */
+@keyframes ants {
+  to {
+    background-position: 100% 100%, 0 0;
   }
+}
+
 </style>

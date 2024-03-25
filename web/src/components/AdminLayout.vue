@@ -3,9 +3,9 @@
     <a-layout-header style="background: #fff; padding: 0">
             <div class="header">
       <!--        <img class="header-logo" :src="logo">-->
-              <span class="header-title">商城后台管理系统</span>
+              <span class="header-title">在线知识库台管理系统</span>
               <div class="empty"></div>
-              <a-button style="margin-right: 24px;" @click="handlePreview">前台预览</a-button>
+              <a-button style="margin-right: 24px;" @click="handlePreview">前台界面</a-button>
               <span>管理员</span>
               <HeaderDropDown/>
               <a class="header-quit" @click="handleLogout">退出</a>
@@ -103,7 +103,7 @@ const handleClick = ({item, key, keyPath}) => {
 }
 
 const handlePreview = ()=>{
-  let text = router.resolve({name: 'index'})
+  let text = router.resolve({name: 'Home'})
   window.open(text.href, '_blank')
 }
 

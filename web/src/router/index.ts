@@ -36,18 +36,18 @@ const routes: Array<RouteRecordRaw> = [
         component: AdminEbook
     },
     {
-        path: '/admin/category',
+        path: '/category',
         name: 'AdminCategory',
         component: AdminCategory,
         meta: {requiresAuth: true, permissions: ['admin']}
     },
     {
-        path: '/admin/doc',
+        path: '/doc',
         name: 'AdminDoc',
         component: AdminDoc
     },
     {
-        path: '/admin/user',
+        path: '/user',
         name: 'AdminUser',
         component: AdminUser,
 
@@ -59,6 +59,29 @@ const routes: Array<RouteRecordRaw> = [
         children: [
             {path: '/errorLog', name: 'errorLog', component: () => import('../views/admin/ErrorLog.vue')},
             {path: '/opLog', name: 'opLog', component: () => import('../views/admin/OpLog.vue')},
+            {path: '/loginLog', name: 'loginLog', component: () => import('../views/admin/LoginLog.vue')},
+            {path: '/overview', name: 'overview', component: () => import('../components/the-welcome.vue')},
+            {
+                path: 'category',
+                name: 'category',
+                component: AdminCategory,
+                // meta: {requiresAuth: true, permissions: ['admin']}
+            },
+            {
+                path: 'doc',
+                name: 'doc',
+                component: AdminDoc
+            },
+            {
+                path: 'user',
+                name: 'user',
+                component: AdminUser,
+
+            },{
+                path: 'ebook',
+                name: 'ebook',
+                component: AdminEbook
+            },
         ]
 
     },

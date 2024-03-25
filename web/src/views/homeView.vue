@@ -30,19 +30,31 @@
         :style="{ background: '#fff', padding: '20px', margin: 0, minHeight: '280px'}"
     >
 
-<!--      <div class="welcome" v-show="isShowWelcome">-->
-<!--        <h1>welcome</h1>-->
+      <div class="welcome" v-show="isShowWelcome">
+        <h1>welcome</h1>
 <!--        <the-welcome/>-->
-<!--      </div>-->
+        <div class="tip">
+          <div><b>示例网站说明：</b></div>
+          <div>1. 统计数据是真实的，一分钟左右延时。</div>
+          <div>2. 有文档被点赞会收到实时通知哦！</div>
+          <div>3. 左侧菜单是动态加载的，登录后在分类管理可配置</div>
+          <div>4. 文档树可无限级扩展，支持文字、图片、<b>视频</b></div>
+          <div>你也想有个WIKI知识库吗？，<b>配套视频课程</b>：
+            <a href="#" target="_blank">
+              知识库系统》
+            </a>
+          </div>
+        </div>
+      </div>
 
       <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
-<!--              <span v-for="{ icon, text } in actions" :key="icon">-->
-<!--                <component :is="icon" style="margin-right: 8px" />-->
-<!--                {{ text }}-->
-<!--              </span>-->
+              <span v-for="{ icon, text } in actions" :key="icon">
+                <component :is="icon" style="margin-right: 8px" />
+                {{ text }}
+              </span>
               <span>
                 <component :is="FileOutlined" style="margin-right: 8px" />
                 {{item.docCount}}
@@ -102,7 +114,7 @@ export default defineComponent({
   },
   methods: {LikeFilled, UserOutlined, FileOutlined},
   setup() {
-    console.log("setup......");
+    console.log("homeSetup......");
     const ebooks = ref();
     // const ebooks1 = reactive({books: []});
     const openKeys =  ref();
@@ -188,5 +200,15 @@ export default defineComponent({
   line-height: 50px;
   border-radius: 8%;
   margin: 5px 0;
+}
+</style>
+<style scoped>
+.tip {
+  padding: 10px 5px;
+  margin-bottom: 20px;
+  color: red;
+  border: 1px solid transparent;
+  background: linear-gradient(white,white) padding-box,repeating-linear-gradient(-45deg, black 0, black 25%, white 0, white 50%) 0/.6em .6em;
+  animation:ants 12s linear infinite;
 }
 </style>

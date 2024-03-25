@@ -101,12 +101,12 @@ const getDataList = () => {
 }
 
 
-const rowSelection = ref({
-  onChange: (selectedRowKeys: (string | number)[], selectedRows: DataItem[]) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    data.selectedRowKeys = selectedRowKeys;
-  },
-});
+// const rowSelection = ref({
+//   onChange: (selectedRowKeys: (string | number)[], selectedRows: DataItem[]) => {
+//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+//     data.selectedRowKeys = selectedRowKeys;
+//   },
+// });
 
 </script>
 

@@ -38,7 +38,8 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/admin/category',
         name: 'AdminCategory',
-        component: AdminCategory
+        component: AdminCategory,
+        meta: {requiresAuth: true, permissions: ['admin']}
     },
     {
         path: '/admin/doc',
@@ -49,7 +50,17 @@ const routes: Array<RouteRecordRaw> = [
         path: '/admin/user',
         name: 'AdminUser',
         component: AdminUser,
-        meta: {requiresAuth: true, permissions: ['admin']}
+
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: () => import('../components/AdminLayout.vue'),
+        children: [
+            {path: '/errorLog', name: 'errorLog', component: () => import('../views/admin/ErrorLog.vue')},
+            {path: '/opLog', name: 'opLog', component: () => import('../views/admin/OpLog.vue')},
+        ]
+
     },
     {
         path: '/user',
@@ -89,10 +100,12 @@ router.beforeEach((to, from, next) => {
 
 
     if (to.matched.some(function (item) {
-        console.log(item, "是否需要登录校验：", item.meta.loginRequire);
-        return item.meta.loginRequire
+        console.log(item, "是否需要登录校验：", item.meta.requiresAuth);
+        return item.meta.requiresAuth
     })) {
         const loginUser = store.state.user;
+        console.log('loginUser', loginUser);
+        console.log('store', store.state);
         if (Tool.isEmpty(loginUser)) {
             console.log("用户未登录！");
             next('/user');

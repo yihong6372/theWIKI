@@ -1,6 +1,8 @@
 package net.geekh.wiki.exception;
 
+import net.geekh.wiki.service.ErrorLogService;
 import net.geekh.wiki.vo.CommonResponseVo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +19,10 @@ import java.util.Objects;
 @ControllerAdvice
 public class ExceptionHandle {
 
+
+    @Autowired
+    private ErrorLogService errorLogService;
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public CommonResponseVo MethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -26,6 +32,8 @@ public class ExceptionHandle {
     @ExceptionHandler(RuntimeException.class)
     @ResponseBody
     public CommonResponseVo runtimeException(RuntimeException e) {
-        return new CommonResponseVo(-1, "错误！！  " + e.getMessage());
+        errorLogService.saveLog(e);
+        System.out.println("RuntimeException========"+e.getMessage() );
+        return new CommonResponseVo(-111, "RuntimeException="+e.toString());
     }
 }

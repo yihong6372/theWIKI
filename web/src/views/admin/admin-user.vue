@@ -6,7 +6,7 @@
       <p>
         <a-form layout="inline" :model="param">
           <a-form-item>
-            <a-input v-model:value="param.loginName" placeholder="登陆名">
+            <a-input v-model:value="param.userName" placeholder="登陆名">
             </a-input>
           </a-form-item>
           <a-form-item>
@@ -61,7 +61,7 @@
   >
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="登陆名">
-        <a-input v-model:value="user.loginName" :disabled="!!user.id"/>
+        <a-input v-model:value="user.userName" :disabled="!!user.id"/>
       </a-form-item>
       <a-form-item label="昵称">
         <a-input v-model:value="user.name" />
@@ -110,16 +110,32 @@ export default defineComponent({
 
     const columns = [
       {
-        title: '登陆名',
-        dataIndex: 'loginName'
+        title: '用户名',
+        dataIndex: 'userName'
       },
       {
-        title: '名称',
-        dataIndex: 'name'
+        title: '昵称',
+        dataIndex: 'nickName'
       },
       {
-        title: '密码',
-        dataIndex: 'password'
+        title: '性别',
+        dataIndex: 'sex'
+      },
+      {
+        title: '邮箱',
+        dataIndex: 'email'
+      },
+      {
+        title: '手机号',
+        dataIndex: 'phonenumber'
+      },
+      {
+        title: '状态',
+        dataIndex: 'status'
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime'
       },
       {
         title: 'Action',
@@ -135,21 +151,15 @@ export default defineComponent({
       loading.value = true;
       // 如果不清空现有数据，则编辑保存重新加载数据后，再点编辑，则列表显示的还是编辑前的数据
       users.value = [];
-      axios.get("/user/list", {
-        params: {
-          page: params.page,
-          size: params.size,
-          loginName: param.value.loginName
-        }
-      }).then((response) => {
+      axios.get("/user/list").then((response) => {
         loading.value = false;
         const data = response.data;
-        if (data.success) {
-          users.value = data.content.list;
+        if (data.status == 200) {
+          users.value = data.data;
 
           // 重置分页按钮
           pagination.value.current = params.page;
-          pagination.value.total = data.content.total;
+          pagination.value.total = data.data.total;
         } else {
           message.error(data.message);
         }

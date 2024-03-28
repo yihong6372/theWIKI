@@ -103,7 +103,7 @@ const validatePass2 = async (_rule: Rule, value: string) => {
 
 
 const rules: Record<string, Rule[]> = {
-  email: [{required: true, trigger: 'change',message: '用户名不能为空'},{type: 'email', message: '请输入正确的邮箱格式'}],
+  email: [{required: true, trigger: 'change',message: '邮箱不能为空'},{type: 'email', message: '请输入正确的邮箱格式'}],
   userName: [{required: true, trigger: 'change',message: '用户名不能为空'}],
   password: [{required: true, validator: validatePass, trigger: 'change'}],
   checkPass: [{validator: validatePass2, trigger: 'change'}],

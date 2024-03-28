@@ -4,7 +4,18 @@
             <div class="header">
       <!--        <img class="header-logo" :src="logo">-->
               <span class="header-title">在线知识库台管理系统</span>
-              <div class="empty"></div>
+              <div class="empty">
+                <a-menu mode="horizontal" style="padding-top: 0">
+                  <a-menu-item key="home">
+                    <router-link to="/home"/>
+                    电子书首页
+                  </a-menu-item>
+                  <a-menu-item key="about">
+                    关于我们
+                    <router-link to="/about"/>
+                  </a-menu-item>
+                </a-menu>
+              </div>
               <a-button style="margin-right: 24px;" @click="handlePreview">前台界面</a-button>
               <span>管理员</span>
               <HeaderDropDown/>
@@ -12,52 +23,6 @@
             </div>
     </a-layout-header>
     <a-layout>
-      <a-layout-sider v-model="collapsed" collapsible >
-        <a-menu style="overflow:auto; overflow-x: hidden;" v-model:selectedKeys="selectedKeys" theme="dark" mode="inline" @click="handleClick">
-          <a-menu-item key="overview">
-            <home-outlined/>
-            <span>总览</span>
-          </a-menu-item>
-          <a-menu-item key="user">
-            <user-outlined/>
-            <span>用户管理</span>
-          </a-menu-item>
-          <a-menu-item key="category">
-            <layout-outlined/>
-            <span>分类管理</span>
-          </a-menu-item>
-          <a-menu-item key="ebook">
-            <tag-outlined/>
-            <span>电子书管理</span>
-          </a-menu-item>
-          <a-menu-item key="comment" :disabled="true">
-            <comment-outlined/>
-            <span>评论管理</span>
-          </a-menu-item>
-          <a-sub-menu>
-            <template #icon>
-              <folder-outlined/>
-            </template>
-            <template #title>日志管理</template>
-            <a-menu-item key="loginLog">
-              <appstore-outlined/>
-              <span>登录日志</span>
-            </a-menu-item>
-            <a-menu-item key="opLog">
-              <appstore-outlined/>
-              <span>操作日志</span>
-            </a-menu-item>
-            <a-menu-item key="errorLog">
-              <appstore-outlined/>
-              <span>错误日志</span>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-menu-item key="sysInfo" :disabled="true">
-            <info-circle-outlined/>
-            <span>系统信息</span>
-          </a-menu-item>
-        </a-menu>
-      </a-layout-sider>
       <a-layout-content :style="{ margin: '16px 16px', minHeight: '200px' }">
         <router-view/>
       </a-layout-content>

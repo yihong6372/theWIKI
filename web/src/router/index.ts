@@ -9,49 +9,9 @@ import UserLayout from "@/views/user/UserLayout.vue";
 import AdminUser from "@/views/admin/admin-user.vue";
 import {Tool} from "@/util/tool";
 import store from "@/store";
+import HomeLayout from "@/components/HomeLayout.vue";
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        name: 'Home',
-        component: HomeView
-    },
-    {
-        path: '/doc',
-        name: 'Doc',
-        component: DocView
-    },
-    {
-        path: '/about',
-        name: 'About',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        // component: () => import(/* webpackChunkName: "about" */ '../views/aboutView.vue')
-        component: AboutView
-    },
-    {
-        path: '/admin/ebook',
-        name: 'AdminEbook',
-        component: AdminEbook
-    },
-    {
-        path: '/category',
-        name: 'AdminCategory',
-        component: AdminCategory,
-        meta: {requiresAuth: true, permissions: ['admin']}
-    },
-    {
-        path: '/doc',
-        name: 'AdminDoc',
-        component: AdminDoc
-    },
-    {
-        path: '/user',
-        name: 'AdminUser',
-        component: AdminUser,
-
-    },
     {
         path: '/admin',
         name: 'Admin',
@@ -85,26 +45,50 @@ const routes: Array<RouteRecordRaw> = [
         ]
 
     },
+
     {
-        path: '/user',
-        name: 'userView',
-        component: UserLayout,
-        redirect: '/user/login',
+        path: '/',
+        name: 'home',
+        component: HomeLayout,
+        redirect: '/home',
         children: [
             {
-                path: 'login',
-                name: 'login',
-                component: () => import(/* webpackChunkName: "user" */ '@/views/user/UserLogin.vue')
+                path: 'home',
+                name: 'homeView',
+                component: HomeView
             },
             {
-                path: 'register',
-                name: 'register',
-                component: () => import(/* webpackChunkName: "user" */ '@/views/user/UserRegister.vue')
+                path: 'doc',
+                name: 'docView',
+                component: DocView
+            },
+            {
+                path: 'about',
+                name: 'about',
+                component: AboutView
             },
             {
                 path: '/user/info',
                 name: 'userInfo',
                 component: () => import('@/views/user/UserInfo.vue')
+            },{
+                path: '/user',
+                name: 'userView',
+                component: UserLayout,
+                redirect: '/user/login',
+                children: [
+                    {
+                        path: 'login',
+                        name: 'login',
+                        component: () => import(/* webpackChunkName: "user" */ '@/views/user/UserLogin.vue')
+                    },
+                    {
+                        path: 'register',
+                        name: 'register',
+                        component: () => import(/* webpackChunkName: "user" */ '@/views/user/UserRegister.vue')
+                    },
+
+                ]
             },
         ]
     }

@@ -47,14 +47,15 @@
         </div>
       </div>
 
-      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large" :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
+      <a-list v-show="!isShowWelcome" item-layout="vertical" size="large"
+              :grid="{ gutter:20, column: 3}" :pagination="pagination" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
-              <span v-for="{ icon, text } in actions" :key="icon">
-                <component :is="icon" style="margin-right: 8px" />
-                {{ text }}
-              </span>
+<!--              <span v-for="{ icon, text } in actions" :key="icon">-->
+<!--                <component :is="icon" style="margin-right: 8px" />-->
+<!--                {{ text }}-->
+<!--              </span>-->
               <span>
                 <component :is="FileOutlined" style="margin-right: 8px" />
                 {{item.docCount}}

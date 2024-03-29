@@ -46,6 +46,8 @@
         </a-menu>
       </template>
       <span v-show="!user.id" class="ant-pro-account-avatar">
+        <span>请登录</span>
+        <RightOutlined />
       <a-avatar size="large" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                 class="antd-pro-global-header-index-avatar"/>
       <span style="color: #00ff22">{{ user.name }}</span>
@@ -57,7 +59,7 @@
 </template>
 
 <script lang="ts" setup>
-import {UserOutlined, DownOutlined} from '@ant-design/icons-vue';
+import {UserOutlined, DownOutlined, RightOutlined} from '@ant-design/icons-vue';
 import type {MenuProps} from 'ant-design-vue';
 import axios from "axios";
 import {message} from "ant-design-vue";

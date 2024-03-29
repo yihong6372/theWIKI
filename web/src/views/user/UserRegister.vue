@@ -114,20 +114,18 @@ const handleFinish = (values: FormState) => {
 
   axios.post('/user/register',formState).then((response) => {
     const data = response.data;
-    if (data.code === 200) {
+    if (data.status === 200) {
       message.success(data.msg);
 
       store.dispatch('updateUserNamePassword', {
         userName: formState.userName,
         password: formState.password
       });
-      console.log('设置完成store', store.state);
 
       //注册成功跳转
       console.log('注册成功，开始跳转/login');
       router.push('login')
     }else {
-      console.log('注册失败==》',data)
       message.error(data.msg);
     }
   })

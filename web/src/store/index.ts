@@ -4,13 +4,17 @@ export default createStore({
   state: {
     userName: '',
     password: '',
-    user: {}
+    user: {},
+    permissions: []
   },
   getters: {
   },
   mutations: {
     setUser (state, user) {
       state.user = user
+    },
+    clearUser (state) {
+      state.user = {};
     },
     setUserNamePassword (state,{userName, password}) {
       state.userName = userName;

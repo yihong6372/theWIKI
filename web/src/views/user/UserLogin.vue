@@ -84,17 +84,22 @@ const onFinishFailed = (errorInfo: any) => {
   console.log('Failed:', errorInfo);
 };
 const router = useRouter();
+const testUser = {
+  nickName: 'test',
+  userName: 'testName',
+}
 const login = () => {
   axios.post('/user/login', formState).then((response) => {
     let respData = response.data;
-    console.log(respData);
     if (respData.status === 200) {
-      // store.commit("setUser", respData.data.token);
+      store.commit("setUser", testUser);
       localStorage.setItem('token', respData.data.token);
-      localStorage.setItem('user', 'testLogin');
+      console.log('locl',localStorage.getItem('token'))
       message.success('登陆成功');
-      console.log(localStorage.getItem('token'));
-      router.push('/user/info')
+      setTimeout(()=>{
+        router.push('/')
+      },1000)
+
     } else {
       message.error(respData.msg);
     }
@@ -102,10 +107,8 @@ const login = () => {
 };
 
 onMounted(() => {
-  console.log('填充前', formState);
   formState.userName = store.state.userName;
   formState.password = store.state.password;
-  console.log('填充后', formState);
 })
 
 </script>

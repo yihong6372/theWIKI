@@ -115,7 +115,7 @@ router.beforeEach((to, from, next) => {
         console.log('store', store.state);
         if (Tool.isEmpty(loginUser)) {
             console.log("用户未登录！");
-            next('/user');
+            next('/user/login');
         } else {
             next();
         }

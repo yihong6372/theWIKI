@@ -74,7 +74,7 @@
                       <a-input size="large"  v-model:value="userInfoForm.email"/>
                     </a-form-item>
                     <a-form-item
-                        name="phonenember"
+                        name="phonenumber"
                         has-feedback
                         label='手机号'
                     >
@@ -262,7 +262,7 @@ const getUserInfo =  () => {
 }
 
 const putUserInfo =  (values: any) => {
-  console.log('handleFinish=>',values, formState, formRef);
+  console.log('handleFinish=>',values, formState, formRef.value);
   axios.put('/user/userInfo',values).then((resp) => {
     const respData = resp.data;
     if (respData.status === 200) {

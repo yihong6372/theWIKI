@@ -1,10 +1,10 @@
 <template>
   <div>
     <a-dropdown v-show="true" class="menu">
-      <span v-show="user.id" class="ant-pro-account-avatar">
+      <span v-show="user.nickName" class="ant-pro-account-avatar">
+        <span style="margin: 2px">欢迎：{{ user.nickName }}</span>
       <a-avatar src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                 class="antd-pro-global-header-index-avatar"/>
-<!--        <span style="color: #00ff22">{{ user.name }}</span>-->
       </span>
       <template #overlay>
         <a-menu @click="handleMenuClick">
@@ -45,12 +45,11 @@
           </a-menu-item>
         </a-menu>
       </template>
-      <span v-show="!user.id" class="ant-pro-account-avatar">
+      <span v-show="!user.nickName" class="ant-pro-account-avatar">
         <span>请登录</span>
         <RightOutlined />
       <a-avatar size="large" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                 class="antd-pro-global-header-index-avatar"/>
-      <span style="color: #00ff22">{{ user.name }}</span>
       </span>
     </a-dropdown>
 
@@ -64,13 +63,13 @@ import type {MenuProps} from 'ant-design-vue';
 import axios from "axios";
 import {message} from "ant-design-vue";
 import {useRoute, useRouter} from "vue-router";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import { jwtDecode } from 'jwt-decode';
+import store from "@/store";
 const router = useRouter();
-const user = ref({
-  id: '',
-  name: ''
-});
+
+const user = computed(() => store.state.user);
+
 
 console.log('user.id', user.value.id);
 const handleMenuClick: MenuProps['onClick'] = e => {
@@ -100,26 +99,16 @@ function logout() {
     let data = response.data;
     if (data.status === 200) {
       message.success(data.msg);
-      localStorage.setItem('token', '');
-      localStorage.setItem('user', '');
-      resetUser();
+      localStorage.removeItem('token');
+      store.commit('setUser' ,{})
     } else {
-      console.log('登出异常》', data);
       message.error(data.msg);
     }
   })
 }
 
-function resetUser() {
-  let a = localStorage.getItem('token');
-  if (a) {
-    user.value.id = '1';
-    user.value.name = a || '';
-  } else {
-    user.value.id = '';
-    user.value.name = '';
-  }
-}
+
+
 
 const jwt :any = localStorage.getItem('token');
 const decodedToken = ref({});
@@ -127,14 +116,13 @@ console.log('jwt',jwt);
 function decodeJwt() {
   try {
     decodedToken.value = jwtDecode(jwt);
-    console.log('jwt',decodedToken.value);
+    console.log('jwt::',decodedToken.value);
   } catch (error) {
     console.error('jwt解析失败', error);
   }
 }
 
 onMounted(() => {
-  resetUser()
   decodeJwt();
 })
 

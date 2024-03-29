@@ -5,6 +5,7 @@
           mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
           @click="handleClick"
+          :open-keys="openKeys"
       >
 
         <a-menu-item key="welcome">
@@ -34,12 +35,11 @@
         <h1>welcome</h1>
 <!--        <the-welcome/>-->
         <div class="tip">
-          <div><b>示例网站说明：</b></div>
-          <div>1. 统计数据是真实的，一分钟左右延时。</div>
+          <div><b>网站说明：</b></div>
+          <div>===</div>
           <div>2. 有文档被点赞会收到实时通知哦！</div>
-          <div>3. 左侧菜单是动态加载的，登录后在分类管理可配置</div>
-          <div>4. 文档树可无限级扩展，支持文字、图片、<b>视频</b></div>
-          <div>你也想有个WIKI知识库吗？，<b>配套视频课程</b>：
+          <div>3.===</div>
+          <div>4. 文档树可无限级扩展，支持文字、图片、<b>视频</b>
             <a href="#" target="_blank">
               知识库系统》
             </a>
@@ -135,6 +135,11 @@ export default defineComponent({
           categorys = data.data;
           level1.value = [];
           level1.value = Tool.array2Tree(categorys, 0);
+
+          openKeys.value = [];
+          for (let i = 0; i < categorys.length; i++) {
+            openKeys.value.push(categorys[i].id)
+          }
 
         } else {
           message.error(data.msg);

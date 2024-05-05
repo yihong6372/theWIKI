@@ -24,7 +24,10 @@
             <div class="ai-content">
               <a-collapse v-model:activeKey="activeKey">
                 <a-collapse-panel key="1" header="AI摘要：">
-                  <p style="line-height: 1.6; color: #666">{{ eventData }}</p>
+<!--                  <p style="line-height: 1.6; color: #666">-->
+<!--                  <p style="line-height: 1.6; color: #666">{{ eventHTML }}</p>-->
+<!--                  </p>-->
+                  <div class="eventHTML" v-html="eventHTML"></div>
                 </a-collapse-panel>
               </a-collapse>
             </div>
@@ -46,12 +49,13 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, onBeforeUnmount, onMounted, ref} from 'vue';
+import {computed, defineComponent, onBeforeUnmount, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {message} from 'ant-design-vue';
 import {Tool} from "@/util/tool";
 import {useRoute} from "vue-router";
 import {EventSourcePolyfill} from "event-source-polyfill";
+import {marked} from "marked";
 
 export default defineComponent({
   name: 'DocView',
@@ -158,6 +162,8 @@ export default defineComponent({
     const eventData = ref<string>('');
     const activeKey = ref(['1']);
 
+    const eventHTML = computed(() => marked.parse(eventData.value))
+
     const createSSE = async () => {
       if (window.EventSource) {
         sseEvent.value = new EventSourcePolyfill(`${url}/sse/stream/${clientId.value}`, {
@@ -214,7 +220,8 @@ export default defineComponent({
       doc,
       vote,
       activeKey,
-      eventData
+      eventData,
+      eventHTML
     }
   }
 });
@@ -228,7 +235,7 @@ export default defineComponent({
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 盒子阴影 */
   margin: 20px;                    /* 外边距 */
   background-color: #cbeef3;          /* 背景颜色 */
-  max-width: 600px;                /* 最大宽度 */
+  max-width: 900px;                /* 最大宽度 */
 }
 
 .wangeditor {

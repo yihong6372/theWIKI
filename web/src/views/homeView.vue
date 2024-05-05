@@ -100,7 +100,7 @@ const pagination = {
   onChange: (page: number) => {
     console.log(page);
   },
-  pageSize: 3,
+  pageSize: 6,
 };
 const actions: any= [
   { icon: StarOutlined, text: '156' },

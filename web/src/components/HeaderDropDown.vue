@@ -46,7 +46,7 @@
         </a-menu>
       </template>
       <span v-show="!user.nickName" class="ant-pro-account-avatar">
-        <span>请登录</span>
+<!--        <span>请登录</span>-->
         <RightOutlined />
       <a-avatar size="large" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                 class="antd-pro-global-header-index-avatar"/>

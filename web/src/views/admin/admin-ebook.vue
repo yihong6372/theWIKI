@@ -236,7 +236,14 @@ export default defineComponent({
       axios.post("/ebook/save", ebook.value).then((response) => {
         const data = response.data;
         if (data.status == 0) {
+          message.success(data.msg)
           //重新加载
+          if (!ebook.value.id) {
+            handleQuery({
+              page: Math.ceil(pagination.value.total / pagination.value.pageSize),
+              size: pagination.value.pageSize,
+            });
+          }
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize,
@@ -276,6 +283,7 @@ export default defineComponent({
         const data = response.data;
         if (data.status == 0) {
           //成功
+          message.success(data.msg);
           handleQuery({
             page: pagination.value.current,
             size: pagination.value.pageSize,

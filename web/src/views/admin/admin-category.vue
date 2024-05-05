@@ -70,7 +70,7 @@
         <a-input v-model:value="category.sort"/>
       </a-form-item>
       <a-form-item label="父分类">
-        <a-input v-model:value="category.parent"/>
+        <a-input :disabled="true" v-model:value="category.parent"/>
         <a-select
             ref="select"
             v-model:value="category.parent"
@@ -105,7 +105,6 @@ export default defineComponent({
       pageSize: 4,
       total: 0
     });
-    console.log("onsetup...", categorys)
     const loading = ref(false);
 
     const columns = [
@@ -165,7 +164,6 @@ export default defineComponent({
     const category = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
-    console.log('category----', category);
     const handleModalOk = () => {
       modalLoading.value = true;
 
@@ -173,6 +171,7 @@ export default defineComponent({
         const data = response.data;
         if (data.status == 0) {
           //重新加载
+          message.success(data.msg);
           handleQuery();
         } else {
           alert(data.msg);
@@ -209,7 +208,10 @@ export default defineComponent({
         const data = response.data;
         if (data.status == 0) {
           //成功
+          message.success("删除成功");
           handleQuery();
+        } else {
+          message.error("删除失败");
         }
 
       });

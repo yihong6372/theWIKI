@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    Ant Design Yihong
+    在线知识库系统
   </a-layout-footer>
 </template>
 <script lang="ts">

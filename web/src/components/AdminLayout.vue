@@ -3,12 +3,11 @@
     <a-layout-header style="background: #fff; padding: 0">
             <div class="header">
       <!--        <img class="header-logo" :src="logo">-->
-              <span class="header-title">在线知识库台管理系统</span>
+              <span class="header-title">在线知识库后台管理系统</span>
               <div class="empty"></div>
               <a-button style="margin-right: 24px;" @click="handlePreview">前台界面</a-button>
               <span>管理员</span>
               <HeaderDropDown/>
-              <a class="header-quit" @click="handleLogout">退出</a>
             </div>
     </a-layout-header>
     <a-layout>
